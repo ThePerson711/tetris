@@ -18,7 +18,7 @@
         }
         .main {
             width: 360px;
-            height: 600px;
+            height: 620px;
             background-color: rgb(33, 33, 33);
             border-radius: 16px;
             border: solid 8px rgb(104, 104, 104);
@@ -78,12 +78,27 @@
             font-size: 24px;
         }
         .buttons {
-            width: 500px;
-            height: 100px;
+            padding: 2px;
+            height: 60px;
             background-color: lightgray;
             position: relative;
-            left: -200px;
-            top: 535px
+            left: -295px;
+            top: 540px;
+            display: flex;
+            flex-direction: row;
+            border-radius: 12px;
+            border: solid 2px red;
+        }
+        button {
+            width: 60px;
+            height: 50px;
+            border-radius: 20px;
+            margin: 6px;
+            border: solid 4px black;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: rgb(89, 88, 88);
         }
     </style>
 </head>
@@ -103,15 +118,15 @@
         </div>
     </div>
     <div class="buttons">
-        <button onclick="MoveLR('left');">Chap</button>    
-        <button onclick="MoveLR('right');">O`ng</button>    
-        <button onclick="Rotate();">Aylantir</button>    
+        <button onclick="MoveLR('left');">Left</button>    
+        <button onclick="MoveLR('right');">Right</button>    
+        <button onclick="Rotate();">Rotate</button>    
         <button onclick="
                 clearInterval(id);
                 interval = 10;
                 ElementDrop();
             ">
-            Tushirmoq
+            Down
         </button>    
     </div>
 </div>
