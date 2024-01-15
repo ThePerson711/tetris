@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=s, initial-scale=1.0">
+    <title>TETRIS</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        body {
+            background-color: rgb(148, 124, 124);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .main {
+            width: 360px;
+            height: 600px;
+            background-color: rgb(33, 33, 33);
+            border-radius: 16px;
+            border: solid 8px rgb(104, 104, 104);
+            display: flex;
+        }
+        .block-panel {
+            width: 250px;
+            height: 500px;
+            background-color: gray;
+            border: solid 6px rgb(255, 255, 255);
+            border-radius: 6px;
+            display: grid;
+            grid-template-columns: repeat(10, 25px);
+            position: relative;
+            left: 10px;
+            top: 10px;
+        }
+        .block {
+            width: 22px;
+            height: 22px;
+            background-color: rgb(160, 160, 160);
+            border: solid 1px black;
+            border-radius: 2px;
+        }
+        .display_panel{
+            width: min-content;
+            padding: 0px 4px;
+            height: min-content;
+            background-color: darkgray;
+            border-radius: 6px;
+            border: solid 2px rgb(255, 255, 255);
+            position: relative;
+            left: 20px;
+            top: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+        .score,
+        .best_score {
+            margin: 5px;
+            width: 80%;
+            background-color: rgb(56, 56, 56);
+            border: solid 1px white;
+            border-radius: 4px;
+            font-size: 14px;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+        .score-num,
+        .best_score-num {
+            font-size: 24px;
+        }
+        .buttons {
+            width: 500px;
+            height: 100px;
+            background-color: lightgray;
+            position: relative;
+            left: -200px;
+            top: 535px
+        }
+    </style>
+</head>
+<body>
+<div class="main">
+    <div class="block-panel" id="block-panel">
+    </div>
+    <div class="display_panel">
+        <div class="score">
+            <p class="score-text">SCORE</p>
+            <p class="score-num" id="score">0</p>
+        </div>
+        <div class="best_score">
+            <p class="best_score-text_1">BEST</p>
+            <p class="best_score-text_2">SCORE</p>
+            <p class="best_score-num" id="best_score">0</p>
+        </div>
+    </div>
+    <div class="buttons">
+        <button onclick="MoveLR('left');">Chap</button>    
+        <button onclick="MoveLR('right');">O`ng</button>    
+        <button onclick="Rotate();">Aylantir</button>    
+        <button onclick="
+                clearInterval(id);
+                interval = 10;
+                ElementDrop();
+            ">
+            Tushirmoq
+        </button>    
+    </div>
+</div>
+  
+    <script>
+        let space = [];
+        let col_num = 24;
+        let row_num = 10;
+        let elem_ind = 0;
+        let id;
+        let interval = 250;
+        let el_pos = {
+            x:3 ,
+            y:1
+        };
+        let element = [
+            [0,0,0,0],
+            [0,0,0,0],
+            [0,0,0,0],
+            [0,0,0,0]
+        ];
+        let el_for_r = [
+            [0,0,0,0],
+            [0,0,0,0],
+            [0,0,0,0],
+            [0,0,0,0]
+        ];
+        let element_ind = [
+            [null],
+            [
+                [0,0,1,0],
+                [0,0,1,0],
+                [0,0,1,0],
+                [0,0,1,0]
+            ],
+            [
+                [0,0,0,0],
+                [0,1,1,0],
+                [0,1,1,0],
+                [0,0,0,0]
+            ],
+            [
+                [0,0,0,0],
+                [0,1,0,0],
+                [0,1,0,0],
+                [0,1,1,0]
+            ],
+            [
+                [0,0,0,0],
+                [0,0,1,0],
+                [0,0,1,0],
+                [0,1,1,0]
+            ],
+            [
+                [0,0,0,0],
+                [0,1,1,0],
+                [1,1,0,0],
+                [0,0,0,0]
+            ],
+            [
+                [0,0,0,0],
+                [1,1,0,0],
+                [0,1,1,0],
+                [0,0,0,0]
+            ],
+            [
+                [0,0,0,0],
+                [0,1,0,0],
+                [1,1,1,0],
+                [0,0,0,0]
+            ]
+        ];
+        let num = 0;
+        let bool = true;
+        let color = [
+            'rgb(160, 160, 160)',
+            'aqua',
+            'yellow',
+            'blue',
+            'orange',
+            'green',
+            'red',
+            'blueviolet'
+        ];
+        let score = 0;
+        let best_score = 0;
+        let el_score = document.getElementById('score');
+        let el_best_score = document.getElementById('best_score');
+        CreateDiv();
+        CreateSpace();
+        Start();
+
+        function Start() {
+            score = 0;
+            el_score.innerHTML = score;
+            for (let column = 1; column <= 24; column++) {
+                for (let row = 1; row <= 10; row++) {
+                    space[column][row] = 0;
+                    if (column >= 5) {
+                        document.getElementById(`${column}-${row}`).style = 
+                            `background-color: ${color[0]}`;
+                    }
+                }
+            }
+            CreateElement();
+        }
+
+        function CreateDiv() {
+            for (let column = 5; column <= 24; column++) {
+                for (let row = 1; row <= 10; row++) {
+                    document.getElementById('block-panel').innerHTML+=
+                        `
+                            <div class="block" id="${column}-${row}"></div>
+                        `;
+                }
+            }
+        }
+
+        function CreateSpace() {
+            for (let column = 0; column <= col_num + 1; column++) {
+                space.push([]);
+                for (let row = 0; row <= row_num + 1; row++) {
+                    if ( column === 0 || column === col_num + 1 
+                        || row === 0 || row === row_num + 1) {
+                            space[column].push(-1);
+                    } else {
+                        space[column].push(0);
+                    }
+                }
+            }
+        }
+
+
+        function CreateElement() {
+            ForCheck();
+            elem_ind = Math.floor(Math.random() * 7)+1;
+            element = element_ind[elem_ind];
+            el_pos.y = 1;
+            el_pos.x = 3;
+            interval = 200;
+            ElementDrop();
+        }
+
+        function ElementDrop() {
+            id = setInterval( () => {
+                Color(false);
+                el_pos.y++;
+                if ( CheckElementCord(element) === false ) {
+                    el_pos.y--;
+                    Color(true);
+                    if (el_pos.y === 1 ) {
+                        clearInterval(id);
+                        EndGame();
+                    } else {
+                        for (let e_col = 0; e_col < 4; e_col++) {
+                            for (let e_row = 0; e_row < 4; e_row++) {
+                                if (element[e_col][e_row] === 1) {
+                                        space[el_pos.y+e_col][el_pos.x+e_row] = 
+                                            elem_ind;
+                                }
+                            }
+                        }
+                        clearInterval(id);
+                        CreateElement();
+                    }
+                }
+                Color(true);
+            },interval);
+        }
+
+        function Rotate() {
+            Color(false);
+            for (let column = 0; column < 4;  column++) {
+                for (let row = 0; row < 4; row++) {
+                    el_for_r[column][row] = element[3-row][column];
+                }
+            } 
+            if (CheckElementCord(el_for_r) === true) {
+                for (let column = 0; column < 4;  column++) {
+                    for (let row = 0; row < 4; row++) {
+                        element[column][row] = el_for_r[column][row]; 
+                    }
+                } 
+            }
+            Color(true);
+        }
+
+        function CheckElementCord(el) {
+            bool = true;
+            for (let e_col = 0; e_col < 4; e_col++) {
+                for (let e_row = 0; e_row < 4; e_row++) {
+                    if (  el[e_col][e_row] === 1 && 
+                        space[el_pos.y+e_col][el_pos.x+e_row] !== 0 ) {
+                            bool = false;
+                    }
+                }
+            }
+            return bool;
+        }
+        
+        function Color(bool) {
+            for (let e_col = 0; e_col < 4; e_col++) {
+                for (let e_row = 0; e_row < 4; e_row++) {
+
+                    if (element[e_col][e_row] === 1 && 
+                        5 <= (el_pos.y+e_col) && (el_pos.y+e_col) <= 24 &&
+                        1 <= (el_pos.x+e_row) && (el_pos.x+e_row) <= 10 ) {
+                        if (bool) {
+                            document.getElementById(`${el_pos.y+e_col}-${el_pos.x+e_row}`).style = 
+                            `background-color: ${color[elem_ind]};`;
+                        } else {
+                            document.getElementById(`${el_pos.y+e_col}-${el_pos.x+e_row}`).style = 
+                            `background-color: ${color[0]};`;
+                        }
+                    }
+                }
+            }
+        }
+
+        document.addEventListener('keyup', KeyBoard);
+        function KeyBoard(event) {
+            if (event.code === "ArrowUp") {
+                Rotate();
+            } else if (event.code === "ArrowLeft") {
+                MoveLR('left');
+            } else if (event.code === "ArrowRight") {
+                MoveLR('right');
+            } else if (event.code === 'ArrowDown') {
+                clearInterval(id);
+                interval = 10;
+                ElementDrop();
+            }
+        }
+
+        function MoveLR(dir) {
+            if (dir === 'left') {
+                plus = -1;
+            } else if (dir === 'right') {
+                plus = 1;
+            }
+            bool = true;
+            for (let e_col = 0; e_col < 4; e_col++) {
+                for (let e_row = 0; e_row < 4; e_row++) {
+                    if ( element[e_col][e_row] === 1 &&
+                    space[e_col+el_pos.y][e_row+el_pos.x+plus] !== 0) {
+                        bool = false;
+                    }
+                }                
+            }
+            if (bool) {
+                Color(false);
+                el_pos.x+=plus;
+                Color(true);
+            }
+        }
+
+        function ForCheck() {
+            for (let column = 5; column <= 24; column++) {
+                bool = true;
+                for (let row = 1; row <= 10; row++) {
+                    if (space[column][row] === 0) {
+                        bool = false;
+                    }
+                } 
+                if (bool) {
+                    score += 10;
+                    if (best_score < score) {
+                        best_score = score;
+                    }
+                    el_score.innerHTML = score;
+                    el_best_score.innerHTML = best_score;
+                    for (let i = column; i >= 5; i--) {
+                        for (let row = 1; row <= 10; row++) {
+                            space[i][row] = space[i-1][row];
+                            space[i-1][row] = 0; 
+                            document.getElementById(`${i}-${row}`).style = 
+                            `background-color: ${color[space[i][row]]};`;
+                        }
+                    }
+                }
+            }
+        }
+
+        function EndGame() {
+            clearInterval(id);
+            alert(`Game Over !!! \nYour score: ${score}`);
+            Start();
+        }
+    </script>
+</body>
+</html>
