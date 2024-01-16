@@ -100,12 +100,42 @@
             color: white;
             background-color: rgb(89, 88, 88);
         }
+        .our-chennels {
+            position: relative;
+            left: -520px;
+            top: 630px;
+            height: min-content;
+            width: max-content;
+            padding: 6px 16px;
+            border: none;
+            border-radius: 8px;
+            background-color: rgb(59, 59, 59);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: rgb(200, 200, 200);
+            font-weight: bold;
+            z-index: 100;
+        }
+        .link {
+            border: solid 1px rgb(201, 201, 201);
+            border-radius: 4px;
+            margin: 3px;
+            width: min-content;
+            padding: 2px 0px;
+            width: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor:pointer;
+        }
     </style>
 </head>
 <body>
 <div class="main">
     <div class="block-panel" id="block-panel">
-    </div>
+        </div>
     <div class="display_panel">
         <div class="score">
             <p class="score-text">SCORE</p>
@@ -122,12 +152,22 @@
         <button onclick="MoveLR('right');">Right</button>    
         <button onclick="Rotate();">Rotate</button>    
         <button onclick="
-                clearInterval(id);
-                interval = 10;
-                ElementDrop();
+                Down();
             ">
             Down
         </button>    
+    </div>
+    <div class="our-chennels">
+        <div class="link" onclick="
+            window.location.href = `https://t.me/akroyit`;
+            ">
+            Telegram
+        </div>
+        <div class="link" onclick="
+        window.location.href = `http://www.youtube.com/@AKROYIT`;
+        ">
+            YouTube
+        </div>
     </div>
 </div>
   
@@ -355,10 +395,13 @@
             } else if (event.code === "ArrowRight") {
                 MoveLR('right');
             } else if (event.code === 'ArrowDown') {
-                clearInterval(id);
-                interval = 10;
-                ElementDrop();
+                Down();
             }
+        }
+        function Down() {
+            clearInterval(id);
+            interval = 10;
+            ElementDrop();
         }
 
         function MoveLR(dir) {
