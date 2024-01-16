@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=s, initial-scale=1.0">
     <title>TETRIS</title>
     <style>
+        @font-face {
+            font-family: my_font;
+            src: url(font.ttf);
+        }
         *{
             padding: 0;
             margin: 0;
@@ -23,6 +27,41 @@
             border-radius: 16px;
             border: solid 8px rgb(104, 104, 104);
             display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+            padding: 0;
+        }
+        .top {
+            display: flex;
+            flex-direction: row;
+            align-items: start;
+            justify-content: center;
+        }
+        .top-right {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .title {
+            background-color: rgb(100, 99, 99);
+            border: solid 4px white;
+            border-radius: 8px;
+            width: 60px;
+            height: 350px;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+            
+        }
+        .letter {
+            font-weight: bold;
+            font-family: my_font;
+            font-size: 42px;
+            color: rgb(115, 248, 246);
         }
         .block-panel {
             width: 250px;
@@ -32,9 +71,7 @@
             border-radius: 6px;
             display: grid;
             grid-template-columns: repeat(10, 25px);
-            position: relative;
-            left: 10px;
-            top: 10px;
+            margin-right: 10px;
         }
         .block {
             width: 22px;
@@ -44,15 +81,12 @@
             border-radius: 2px;
         }
         .display_panel{
-            width: min-content;
-            padding: 0px 4px;
+            width: 60px;
+            padding: 0px 2px;
             height: min-content;
             background-color: darkgray;
             border-radius: 6px;
             border: solid 2px rgb(255, 255, 255);
-            position: relative;
-            left: 20px;
-            top: 10px;
             display: flex;
             flex-direction: column;
             justify-content: space-evenly;
@@ -61,7 +95,7 @@
         .score,
         .best_score {
             margin: 5px;
-            width: 80%;
+            width: 85%;
             background-color: rgb(56, 56, 56);
             border: solid 1px white;
             border-radius: 4px;
@@ -79,11 +113,9 @@
         }
         .buttons {
             padding: 2px;
+            width: min-content;
             height: 60px;
             background-color: lightgray;
-            position: relative;
-            left: -295px;
-            top: 540px;
             display: flex;
             flex-direction: row;
             border-radius: 12px;
@@ -101,9 +133,7 @@
             background-color: rgb(89, 88, 88);
         }
         .our-chennels {
-            position: relative;
-            left: -520px;
-            top: 630px;
+            margin-top: 6px;
             height: min-content;
             width: max-content;
             padding: 6px 16px;
@@ -131,22 +161,36 @@
             cursor:pointer;
         }
     </style>
+    <link href="https://www.fontspace.com/god-of-thunder-font-f43822">
 </head>
 <body>
 <div class="main">
-    <div class="block-panel" id="block-panel">
-        </div>
-    <div class="display_panel">
-        <div class="score">
-            <p class="score-text">SCORE</p>
-            <p class="score-num" id="score">0</p>
-        </div>
-        <div class="best_score">
-            <p class="best_score-text_1">BEST</p>
-            <p class="best_score-text_2">SCORE</p>
-            <p class="best_score-num" id="best_score">0</p>
+    <div class="top">
+        <div class="block-panel" id="block-panel">
+            </div>
+        <div class="top-right">
+            <div class="display_panel">
+                <div class="score">
+                    <p class="score-text">SCORE</p>
+                    <p class="score-num" id="score">0</p>
+                </div>
+                <div class="best_score">
+                    <p class="best_score-text_1">BEST</p>
+                    <p class="best_score-text_2">SCORE</p>
+                    <p class="best_score-num" id="best_score">0</p>
+                </div>
+            </div>
+            <div class="title">
+                <p class="letter">T</p>
+                <p class="letter">E</p>
+                <p class="letter">T</p>
+                <p class="letter">R</p>
+                <p class="letter">I</p>
+                <p class="letter">S</p>
+            </div>
         </div>
     </div>
+    
     <div class="buttons">
         <button onclick="MoveLR('left');">Left</button>    
         <button onclick="MoveLR('right');">Right</button>    
@@ -157,17 +201,17 @@
             Down
         </button>    
     </div>
-    <div class="our-chennels">
-        <div class="link" onclick="
-            window.location.href = `https://t.me/akroyit`;
-            ">
-            Telegram
-        </div>
-        <div class="link" onclick="
-        window.location.href = `http://www.youtube.com/@AKROYIT`;
+</div>
+<div class="our-chennels">
+    <div class="link" onclick="
+        window.location.href = `https://t.me/akroyit`;
         ">
-            YouTube
-        </div>
+        Telegram
+    </div>
+    <div class="link" onclick="
+    window.location.href = `http://www.youtube.com/@AKROYIT`;
+    ">
+        YouTube
     </div>
 </div>
   
